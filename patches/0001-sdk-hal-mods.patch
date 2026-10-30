@@ -1,0 +1,129 @@
+diff --git a/libraries/Common/ports/mipicsi_camera/camera_layer.c b/libraries/Common/ports/mipicsi_camera/camera_layer.c
+index 681f9ed6..f59cfe8f 100644
+--- a/libraries/Common/ports/mipicsi_camera/camera_layer.c
++++ b/libraries/Common/ports/mipicsi_camera/camera_layer.c
+@@ -498,7 +498,7 @@ static const st_ov_reg_t cam_config_table_normal_mode[] =
+  { 0x4407, 0x04 }, // JPEG QS
+  { 0x5000, 0xa7 }, // ISP control, Lenc on, gamma on, BPC on, WPC on, CIP on
+ 
+- { 0x3406, 0x01 }, // Bit0: AWB gain manual enable
++ { 0x3406, 0x00 }, // Bit0: AWB gain manual enable
+  { 0x3400, 0x06 },
+  { 0x3401, 0x80 },
+  { 0x3402, 0x04 },
+@@ -570,10 +570,10 @@ static const st_ov_reg_t cam_config_table_normal_mode[] =
+  { 0x5025, 0x00 }, // Unknown
+ 
+  // AEC target
+- { 0x3a0f, 0x40 }, // stable in H
+- { 0x3a10, 0x30 }, // stable in L
+- { 0x3a1b, 0x40 }, // stable out H
+- { 0x3a1e, 0x30 }, // stable out L
++ { 0x3a0f, 0x60 }, // stable in H
++ { 0x3a10, 0x50 }, // stable in L
++ { 0x3a1b, 0x60 }, // stable out H
++ { 0x3a1e, 0x50 }, // stable out L
+  { 0x3a11, 0x71 }, // fast zone H
+  { 0x3a1f, 0x20 }, // fast zone L
+ 
+@@ -588,7 +588,7 @@ static const st_ov_reg_t cam_config_table_normal_mode[] =
+  { 0x3a0e, 0x06 }, { 0x3a0a, 0x00 }, { 0x3a0b, 0x7b }, { 0x3a0d, 0x08 },
+ 
+  // AEC/AGC power down domain control
+- { 0x3a00, 0x3c }, { 0x3a02, 0x05 }, { 0x3a03, 0x44 }, { 0x3a14, 0x05 },
++     { 0x3a00, 0x3c }, { 0x3a02, 0x05 }, { 0x3a03, 0x44 }, { 0x3a14, 0x05 },
+  { 0x3a15, 0x44 },
+ 
+  { 0x3618, 0x00 }, { 0x3612, 0x29 }, { 0x3708, 0x64 }, { 0x3709, 0x52 }, // Unknown
+@@ -944,6 +944,14 @@ uint32_t camera_capture_post_process(void)
+     return 1;
+ }
+ 
++/* 硬件错误计数：用来客观判断丢行/错行是不是 VIN 侧错误导致的 */
++volatile uint32_t g_vin_err_fifo    = 0;
++volatile uint32_t g_vin_err_axi     = 0;
++volatile uint32_t g_vin_err_preclip = 0;
++volatile uint32_t g_vin_err_resp    = 0;
++volatile uint32_t g_vin_err_vsync   = 0;
++volatile uint32_t g_vin_event_total = 0;
++
+ void cam_vin_callback(capture_callback_args_t *p_args)
+ {
+     rt_interrupt_enter();
+@@ -953,6 +961,16 @@ void cam_vin_callback(capture_callback_args_t *p_args)
+ 
+     if(event == VIN_EVENT_NOTIFY)
+     {
++        g_vin_event_total++;
++
++        if (interrupt_status.bits.fifo_overfow)    { g_vin_err_fifo++; }
++        if (interrupt_status.bits.axi_err)         { g_vin_err_axi++; }
++        if (interrupt_status.bits.preclip_h_err ||
++            interrupt_status.bits.preclip_v_err)   { g_vin_err_preclip++; }
++        if (interrupt_status.bits.resp_overflow)   { g_vin_err_resp++; }
++        if (interrupt_status.bits.vsync_deasssert ||
++            interrupt_status.bits.vsync_assert)    { g_vin_err_vsync++; }
++
+         if (interrupt_status.bits.frame_complete)
+         {
+             /* Capture Complete - Process data buffer pointer and index */
+diff --git a/libraries/Common/ports/mipicsi_camera/camera_layer_config.h b/libraries/Common/ports/mipicsi_camera/camera_layer_config.h
+index 41ec6d77..ff1247a8 100644
+--- a/libraries/Common/ports/mipicsi_camera/camera_layer_config.h
++++ b/libraries/Common/ports/mipicsi_camera/camera_layer_config.h
+@@ -36,7 +36,7 @@
+ #define CAMERA_CONFIG_WRITE_VERIFY   (0) // 0: Disabled, 1: Enabled
+ #define DEBUG_CAMERA_I2C_COMM_OUTPUT (0) // 0: Disabled, 1: Enabled
+ 
+-#define CAMERA_CONFIG_BRIGHTNESS     (CONFIG_BRIGHTNESS_ZERO)
++#define CAMERA_CONFIG_BRIGHTNESS     (CONFIG_BRIGHTNESS_PLUS_3)
+ #define CAMERA_CONFIG_CONTRAST       (CONFIG_CONTRAST_ZERO)
+ 
+ // ------------------ Internal auto config ------------------
+diff --git a/libraries/HAL_Drivers/drv_lcd.c b/libraries/HAL_Drivers/drv_lcd.c
+index 730e19a0..144ebb24 100644
+--- a/libraries/HAL_Drivers/drv_lcd.c
++++ b/libraries/HAL_Drivers/drv_lcd.c
+@@ -78,18 +78,22 @@ static void vsync_wait(void)
+ 
+ static void turn_on_lcd_backlight(void)
+ {
++    /* Panel BL is level-enabled: drive it high for max brightness.
++       This board's FSP has no PWM instance registered (rt_device_find("pwm7")
++       returns NULL), so drive the BL pin as GPIO to guarantee backlight on. */
+ #ifdef BSP_USING_LCD_PWM_BACKLIGHT
+-    struct rt_device_pwm *pwm_dev;
+-
+-    /* turn on the LCD backlight */
+-    pwm_dev = (struct rt_device_pwm *)rt_device_find(LCD_PWM_DEV_NAME);
+-    /* pwm frequency:100K = 10000ns */
+-    rt_pwm_set(pwm_dev, 0, 10000, 5000);
+-    rt_pwm_enable(pwm_dev, 0);
+-#else
+-    rt_pin_mode(LCD_BL_PIN, PIN_MODE_OUTPUT);   /* LCD_BL */
+-    rt_pin_write(LCD_BL_PIN, PIN_HIGH);
++    {
++        struct rt_device_pwm *pwm_dev =
++            (struct rt_device_pwm *)rt_device_find(LCD_PWM_DEV_NAME);
++        if (pwm_dev != RT_NULL)
++        {
++            rt_pwm_set(pwm_dev, 0, 10000, 5000);
++            rt_pwm_enable(pwm_dev, 0);
++        }
++    }
+ #endif
++    rt_pin_mode(LCD_BL_PIN, PIN_MODE_OUTPUT);
++    rt_pin_write(LCD_BL_PIN, PIN_HIGH);
+ }
+ 
+ static void ra_bsp_lcd_clear(uint16_t color)
+@@ -415,7 +419,8 @@ int rt_hw_lcd_init(void)
+ 
+     return RT_EOK;
+ }
+-INIT_DEVICE_EXPORT(rt_hw_lcd_init);
++/* LCD 初始化推到 APP 级：GLCDC 起来后会干扰以太网，必须让网口先初始化并拿到 IP */
++INIT_APP_EXPORT(rt_hw_lcd_init);
+ 
+ #if defined(SOC_SERIES_R7FA8M85) || defined(SOC_SERIES_R7KA8P1)
+ rt_weak void ra8_mipi_lcd_init(void)

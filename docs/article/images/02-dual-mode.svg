@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="380" viewBox="0 0 1080 380" role="img" aria-labelledby="dmTitle dmDesc">
+  <title id="dmTitle">云/离线双模状态机</title>
+  <desc id="dmDesc">四个状态：CLOUD 正常走云，连续三次探测失败降级到 LOCAL 规则库，探测恢复后进入 RECOVER 补传队列，补传完毕回到 CLOUD；每 30 秒心跳作为探测。</desc>
+  <defs>
+    <marker id="dmArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#0f766e"/>
+    </marker>
+    <marker id="dmArrowAmber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#b45309"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1080" height="380" fill="#fdfdfc"/>
+
+  <!-- CLOUD -->
+  <rect x="60" y="120" width="210" height="84" rx="12" fill="#ffffff" stroke="#0f766e" stroke-width="1.6"/>
+  <text x="165" y="152" text-anchor="middle" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="15" font-weight="600" fill="#0f766e">CLOUD</text>
+  <text x="165" y="174" text-anchor="middle" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="11" fill="#6b7280">DHCP + DNS + 小请求 200</text>
+  <text x="165" y="192" text-anchor="middle" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="11" fill="#6b7280">三件事同时成立才算通</text>
+
+  <!-- LOCAL -->
+  <rect x="435" y="120" width="210" height="84" rx="12" fill="#ffffff" stroke="#b45309" stroke-width="1.6"/>
+  <text x="540" y="152" text-anchor="middle" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="15" font-weight="600" fill="#b45309">LOCAL</text>
+  <text x="540" y="174" text-anchor="middle" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="11" fill="#6b7280">规则库给建议</text>
+  <text x="540" y="192" text-anchor="middle" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="11" fill="#6b7280">结果进待传队列</text>
+
+  <!-- RECOVER -->
+  <rect x="810" y="120" width="210" height="84" rx="12" fill="#ffffff" stroke="#0f766e" stroke-width="1.6"/>
+  <text x="915" y="152" text-anchor="middle" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="15" font-weight="600" fill="#0f766e">RECOVER</text>
+  <text x="915" y="174" text-anchor="middle" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="11" fill="#6b7280">先补传队列</text>
+  <text x="915" y="192" text-anchor="middle" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="11" fill="#6b7280">再通知串口屏</text>
+
+  <!-- 正向 -->
+  <line x1="272" y1="162" x2="429" y2="162" stroke="#0f766e" stroke-width="1.8" marker-end="url(#dmArrow)"/>
+  <text x="350" y="148" text-anchor="middle" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="11" fill="#6b7280">探测连续失败 ×3</text>
+
+  <line x1="647" y1="162" x2="804" y2="162" stroke="#0f766e" stroke-width="1.8" marker-end="url(#dmArrow)"/>
+  <text x="725" y="148" text-anchor="middle" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="11" fill="#6b7280">探测恢复</text>
+
+  <!-- 回环 -->
+  <path d="M915,206 L915,296 L165,296 L165,208" fill="none" stroke="#0f766e" stroke-width="1.8" marker-end="url(#dmArrow)"/>
+  <text x="540" y="284" text-anchor="middle" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="11" fill="#6b7280">补传完毕，状态回到正常</text>
+
+  <!-- 心跳自环 -->
+  <path d="M110,120 C110,56 220,56 220,120" fill="none" stroke="#b45309" stroke-width="1.4" stroke-dasharray="6 4" marker-end="url(#dmArrowAmber)"/>
+  <text x="165" y="40" text-anchor="middle" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="11" fill="#b45309">每 30 s 心跳探测（PROBING）</text>
+  <text x="540" y="344" text-anchor="middle" font-family="Segoe UI, Microsoft YaHei, sans-serif" font-size="11" fill="#9ca3af">降级要“连续 3 次失败”才动，避免路由器重启被误判成断网</text>
+</svg>

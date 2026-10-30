@@ -1,0 +1,20 @@
+﻿import serial, time, sys
+try:
+    s = serial.Serial("COM7", 115200, timeout=0.2)
+except Exception as e:
+    print("PORT BUSY:", e); sys.exit(2)
+s.reset_input_buffer()
+time.sleep(0.3)
+s.write(b"\r\n")
+time.sleep(0.5)
+buf = s.read(8192).decode("utf-8","replace")
+print("--- shell echo ---")
+print(buf.strip()[:600])
+s.write(b"cam_auto\r\n"); time.sleep(1.0)
+print("--- cam_auto ---")
+print(s.read(8192).decode("utf-8","replace").strip()[:600])
+s.write(b"ifconfig\r\n"); time.sleep(1.0)
+out = s.read(8192).decode("utf-8","replace")
+print("--- ifconfig ---")
+print(out.strip()[:700])
+s.close()

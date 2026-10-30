@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>配图总览 · Titan Board Mini 走查设备</title>
+<style>
+  :root{
+    --ink:#1f2937; --gray:#6b7280; --line:#e5e7eb; --teal:#0f766e; --amber:#b45309; --bg:#fbfbf9;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;padding:48px 24px 96px;background:var(--bg);color:var(--ink);
+       font-family:"Segoe UI","Microsoft YaHei",system-ui,-apple-system,sans-serif;line-height:1.65}
+  .wrap{max-width:1080px;margin:0 auto}
+  header{border-bottom:1px solid var(--line);padding-bottom:24px;margin-bottom:40px}
+  h1{font-size:26px;margin:0 0 8px;letter-spacing:.01em}
+  .sub{color:var(--gray);font-size:14px;margin:0}
+  .hint{margin-top:18px;padding:14px 18px;background:#f0fdfa;border-left:3px solid var(--teal);
+        border-radius:2px;font-size:13.5px;color:#115e59}
+  figure{margin:0 0 56px}
+  .cap{display:flex;align-items:baseline;gap:12px;margin-bottom:12px}
+  .chip{flex:none;font-size:12px;font-weight:700;letter-spacing:.06em;color:#fff;background:var(--teal);
+        padding:3px 9px;border-radius:3px}
+  .chip.amber{background:var(--amber)}
+  .cap h2{font-size:16px;margin:0;font-weight:600}
+  .cap .where{margin-left:auto;font-size:12px;color:var(--gray);white-space:nowrap}
+  img{display:block;width:100%;height:auto;border:1px solid var(--line);border-radius:6px;background:#fff}
+  img.narrow{width:auto;max-width:360px}
+  .note{margin:10px 0 0;font-size:13px;color:var(--gray)}
+  code{display:block;margin-top:10px;padding:9px 12px;background:#f3f4f6;border-radius:4px;
+       font-family:"Cascadia Mono",Consolas,monospace;font-size:12px;color:#374151;
+       overflow-x:auto;white-space:nowrap}
+  .meta{font-size:12px;color:#9ca3af;margin-top:6px}
+  footer{border-top:1px solid var(--line);padding-top:20px;color:var(--gray);font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>配图总览 · 共 12 张</h1>
+    <p class="sub">Titan Board Mini 双屏走查设备 · 2026 RT-Thread 嵌入式大赛参赛作品</p>
+    <p class="hint">全部为 PNG（论坛不支持 SVG）。上传时在文件对话框地址栏粘
+      <strong>D:\RTT\_forum\发布配图</strong> 回车即可看到全部 7 张。图注请手动粘在图下方。</p>
+  </header>
+
+  <figure>
+    <div class="cap"><span class="chip">图 1</span><h2>整机数据通路</h2><span class="where">插入位置：§2 形态</span></div>
+    <img src="图1-系统框图.png" alt="整机数据通路框图">
+    <p class="note">注意底部虚线：断网时建议绕开云端，但界面并不知道来源变了——这是刻意的。</p>
+    <code>D:\RTT\_forum\发布配图\图1-系统框图.png</code>
+    <div class="meta">2400×1120 · 代码绘制（GDI+ 2× 超采样）</div>
+  </figure>
+
+  <figure>
+    <div class="cap"><span class="chip">图 2</span><h2>相机模式实拍</h2><span class="where">插入位置：§3 相机</span></div>
+    <img src="图2-相机模式.png" alt="相机模式实拍">
+    <p class="note">LCD 帧缓冲导出。状态栏那 40 px 因文字重叠已裁掉，见文章「局限」一节。</p>
+    <code>D:\RTT\_forum\发布配图\图2-相机模式.png</code>
+    <div class="meta">800×440</div>
+  </figure>
+
+  <figure>
+    <div class="cap"><span class="chip">图 3</span><h2>空场景不误框</h2><span class="where">插入位置：§3 检查</span></div>
+    <img src="图3-空场景不误框.png" alt="空场景不误框">
+    <p class="note">连续 12 秒、4 次采样 <strong>area=0</strong>。运动检测最容易死在「静态画面里永远有个框」上。</p>
+    <code>D:\RTT\_forum\发布配图\图3-空场景不误框.png</code>
+    <div class="meta">800×440</div>
+  </figure>
+
+  <figure>
+    <div class="cap"><span class="chip">图 4</span><h2>合成画面注入验证</h2><span class="where">插入位置：紧接图 3</span></div>
+    <img src="图4-合成注入验证.png" alt="合成画面帧差注入验证">
+    <p class="note">条纹进入后 <strong>trk=1</strong> 且框包住目标，离开后回 0。合成图可复现，不受现场光照影响。</p>
+    <code>D:\RTT\_forum\发布配图\图4-合成注入验证.png</code>
+    <div class="meta">800×440 · 4.9 KB（纯色合成，所以文件极小）</div>
+  </figure>
+
+  <figure>
+    <div class="cap"><span class="chip">图 5</span><h2>拍照回传 PC</h2><span class="where">插入位置：§3 拍照</span></div>
+    <img class="narrow" src="图5-拍照回传PC.png" alt="PC 端收到的抓拍">
+    <p class="note">PC 端解码结果，320×240 RGB888，<strong>230,400 B</strong>。桌面排线清晰可辨——这才叫链路通了。</p>
+    <code>D:\RTT\_forum\发布配图\图5-拍照回传PC.png</code>
+    <div class="meta">320×240 · 抓拍原图就是这个分辨率，放大只会更糊</div>
+  </figure>
+
+  <figure>
+    <div class="cap"><span class="chip">图 6</span><h2>被走查的原理图局部</h2><span class="where">插入位置：§3 原理图</span></div>
+    <img src="图6-原理图U18.png" alt="原理图 U18 局部">
+    <p class="note">U18 排针与 RA8P1 网络名的对照关系，就是规则引擎要判的东西。</p>
+    <code>D:\RTT\_forum\发布配图\图6-原理图U18.png</code>
+    <div class="meta">2246×927 · 建议在论坛里缩放到 100% 以内，否则横向滚动</div>
+  </figure>
+
+  <figure>
+    <div class="cap"><span class="chip amber">图 7</span><h2>云 / 离线双模状态机</h2><span class="where">插入位置：§5 决定二</span></div>
+    <img src="图7-双模状态机.png" alt="云离线双模状态机">
+    <p class="note">四态：CLOUD / LOCAL / RECOVER，外加每 30 s 心跳探测。降级要「连续 3 次失败」才动。</p>
+    <code>D:\RTT\_forum\发布配图\图7-双模状态机.png</code>
+    <div class="meta">2160×760 · 代码绘制（GDI+ 2× 超采样）</div>
+  </figure>
+
+
+  <figure>
+    <div class="cap"><span class="chip amber">图 8</span><h2>串口屏界面（实拍）</h2><span class="where">插入位置：§9 补遗</span></div>
+    <img src="图8-串口屏界面.jpg" alt="串口屏界面（实拍）">
+    <p class="note">五个区块标签 + 右上角指标 fps 19.7 / age 35ms + 左下 BACK。长句会顶到右边缘，需自动折行。</p>
+    <code>D:\RTT\_forum\发布配图\图8-串口屏界面.jpg</code>
+  </figure>
+  <figure>
+    <div class="cap"><span class="chip amber">图 9</span><h2>未发现错误 · TL084 未检出</h2><span class="where">§9</span></div>
+    <img src="图9-未检出TL084.jpg" alt="未发现错误 · TL084 未检出">
+    <p class="note">注意标题是「未发现错误」，副标题才是「TL084 未检出」——两件事被压成了同一个绿字。</p>
+    <code>D:\RTT\_forum\发布配图\图9-未检出TL084.jpg</code>
+  </figure>
+  <figure>
+    <div class="cap"><span class="chip amber">图 10</span><h2>未发现错误 · 有负电源</h2><span class="where">§9</span></div>
+    <img src="图10-负电源正常.jpg" alt="未发现错误 · 有负电源">
+    <p class="note">TL084 + 负电源，可正常输出 0V；建议未用运放输入接地。</p>
+    <code>D:\RTT\_forum\发布配图\图10-负电源正常.jpg</code>
+  </figure>
+  <figure>
+    <div class="cap"><span class="chip amber">图 11</span><h2>发现错误 · 单电源</h2><span class="where">§9</span></div>
+    <img src="图11-单电源告警.jpg" alt="发现错误 · 单电源">
+    <p class="note">只有 +5V，非轨到轨，输出到不了 0V。</p>
+    <code>D:\RTT\_forum\发布配图\图11-单电源告警.jpg</code>
+  </figure>
+  <figure>
+    <div class="cap"><span class="chip amber">图 12</span><h2>发现错误 · 短接</h2><span class="where">§9</span></div>
+    <img src="图12-短接检测.jpg" alt="发现错误 · 短接">
+    <p class="note">R99（10 Ω）把 +5V 与 −5V 连起来，红色「短接: 是 R99 10欧」。</p>
+    <code>D:\RTT\_forum\发布配图\图12-短接检测.jpg</code>
+  </figure>
+  <footer>
+    图 1 与图 7 为代码绘制，其余为设备/PC 端实拍取证。全部路径见同目录 <strong>配图说明.txt</strong>。
+  </footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,49 @@
+# ---- 编译产物 ----
+build/
+*.o
+*.d
+*.su
+*.elf
+*.bin
+*.hex
+*.map
+*.axf
+*.lst
+.sconsign.dblite
+_cmp.bin
+
+# ---- Python ----
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# ---- 密钥与本地配置（绝对不要提交）----
+api_key.txt
+*.key
+.env
+config.local.*
+
+# ---- 日志 ----
+*.log
+
+# ---- 编辑器 / 系统 ----
+.vscode/
+.settings/
+.idea/
+.DS_Store
+Thumbs.db
+
+# ---- 数据集与模型产物（体积大，不放仓库）----
+datasets/
+dataset/
+dataset_sch/
+ml/images/
+ml/labels/
+ml/runs/
+ml/out_user/
+ml/models/
+
+# ---- 备份 ----
+*.bak
+*.bak_*
