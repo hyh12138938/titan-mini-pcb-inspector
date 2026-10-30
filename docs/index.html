@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>演示视频 · Titan Mini PCB Inspector</title>
+<style>
+  :root{
+    --ink:#111827; --sub:#6b7280; --line:#e5e7eb; --bg:#0b0f14;
+    --card:#ffffff; --teal:#0f766e; --amber:#b45309;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg); color:#e5e7eb; min-height:100vh;
+    font:16px/1.7 "Segoe UI","Microsoft YaHei",system-ui,-apple-system,sans-serif;
+  }
+  .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 72px}
+  header{margin-bottom:22px}
+  .kicker{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#0f766e;font-weight:700}
+  h1{font-size:26px;line-height:1.35;margin:8px 0 6px;color:#f9fafb;font-weight:650}
+  .meta{font-size:13.5px;color:#9ca3af;margin:0}
+  .meta b{color:#d1d5db;font-weight:600}
+  .player{
+    background:#000;border:1px solid #1f2937;border-radius:12px;overflow:hidden;
+    box-shadow:0 24px 60px -24px rgba(0,0,0,.9);margin:22px 0 14px;
+  }
+  video{display:block;width:100%;height:auto;background:#000}
+  .bar{
+    display:flex;flex-wrap:wrap;gap:10px;align-items:center;
+    padding:12px 14px;background:#111827;border-top:1px solid #1f2937;
+    font-size:13.5px;color:#9ca3af;
+  }
+  .bar a{
+    color:#5eead4;text-decoration:none;border:1px solid #134e4a;background:#042f2e;
+    padding:5px 11px;border-radius:999px;font-size:13px;white-space:nowrap;
+  }
+  .bar a:hover{background:#0b3b38}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:26px 0}
+  .card{background:#0f172a;border:1px solid #1f2937;border-radius:10px;padding:14px 16px}
+  .card h3{margin:0 0 6px;font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:#64748b}
+  .card p{margin:0;font-size:14.5px;color:#e2e8f0}
+  .card p small{display:block;color:#94a3b8;font-size:12.5px;margin-top:4px}
+  section.links{margin-top:30px;padding-top:22px;border-top:1px solid #1f2937}
+  section.links h2{font-size:15px;margin:0 0 12px;color:#f3f4f6}
+  ul.plain{list-style:none;margin:0;padding:0}
+  ul.plain li{margin:9px 0;font-size:14px;color:#9ca3af;word-break:break-all}
+  ul.plain a{color:#7dd3fc;text-decoration:none}
+  ul.plain a:hover{text-decoration:underline}
+  code{font-family:"Cascadia Mono",Consolas,monospace;font-size:12.5px;background:#111827;
+       padding:2px 6px;border-radius:4px;color:#a7f3d0}
+  footer{margin-top:40px;padding-top:18px;border-top:1px solid #1f2937;font-size:12.5px;color:#6b7280}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="kicker">Titan Mini PCB Inspector · Demo</div>
+    <h1>双屏 PCB 走查设备 —— 实机演示</h1>
+    <p class="meta">
+      Titan Board Mini（<b>R7KA8P1KFLC</b> / RA8P1，Cortex-M85 + Ethos-U55-256）·
+      RT-Thread · <b>128 s</b> · 960×544 · 带背景音乐
+    </p>
+  </header>
+
+  <div class="player">
+    <video id="v" controls playsinline preload="metadata" poster="video/poster.jpg">
+      <source src="video/demo_with_bgm.mp4" type="video/mp4">
+      你的浏览器不支持 video 标签，请
+      <a href="video/demo_with_bgm.mp4" style="color:#5eead4">点此下载</a>。
+    </video>
+    <div class="bar">
+      <span>播放不出来？</span>
+      <a href="video/demo_with_bgm.mp4" download>下载 MP4（37.6 MB）</a>
+      <a href="https://github.com/hyh12138938/titan-mini-pcb-inspector/raw/main/docs/video/demo_with_bgm.mp4">GitHub Raw</a>
+      <a href="https://cdn.jsdelivr.net/gh/hyh12138938/titan-mini-pcb-inspector@main/docs/video/demo_with_bgm.mp4">jsDelivr CDN</a>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h3>相机</h3>
+      <p>19.7 fps<small>端到端 39 ms · 亮度 116 · G/R 1.005</small></p>
+    </div>
+    <div class="card">
+      <h3>运动检测</h3>
+      <p>20 fps / 3.8 ms<small>空场景 12 s 不误框</small></p>
+    </div>
+    <div class="card">
+      <h3>原理图走查</h3>
+      <p>1787×1269 → 782×556<small>verdict=2 · 1078 次填充</small></p>
+    </div>
+    <div class="card">
+      <h3>面板交互</h3>
+      <p>cmd 3102 / ack 3153<small>err = 0</small></p>
+    </div>
+  </div>
+
+  <section class="links">
+    <h2>视频的几种打开方式</h2>
+    <ul class="plain">
+      <li>▶ 本页播放器：你正在看的就是（<code>docs/video/demo_with_bgm.mp4</code>）</li>
+      <li>仓库文件页：<a href="https://github.com/hyh12138938/titan-mini-pcb-inspector/blob/main/docs/video/demo_with_bgm.mp4">github.com/…/blob/main/docs/video/demo_with_bgm.mp4</a>（点 Download 下载）</li>
+      <li>直链（浏览器直接播放）：<a href="https://github.com/hyh12138938/titan-mini-pcb-inspector/raw/main/docs/video/demo_with_bgm.mp4">…/raw/main/docs/video/demo_with_bgm.mp4</a></li>
+      <li>CDN 直链（最快，可嵌网页）：<a href="https://cdn.jsdelivr.net/gh/hyh12138938/titan-mini-pcb-inspector@main/docs/video/demo_with_bgm.mp4">cdn.jsdelivr.net/gh/…/demo_with_bgm.mp4</a></li>
+    </ul>
+  </section>
+
+  <section class="links">
+    <h2>顺着看下去</h2>
+    <ul class="plain">
+      <li>仓库主页：<a href="https://github.com/hyh12138938/titan-mini-pcb-inspector">github.com/hyh12138938/titan-mini-pcb-inspector</a></li>
+      <li>技术长文（12 张图）：<a href="https://github.com/hyh12138938/titan-mini-pcb-inspector/blob/main/docs/article/Titan-Mini-%E8%B5%B0%E6%9F%A5%E8%AE%BE%E5%A4%87.md">docs/article/Titan-Mini-走查设备.md</a></li>
+      <li>一键安装包：<a href="https://github.com/hyh12138938/titan-mini-pcb-inspector/blob/main/dist/Titan-Mini-PCB-Inspector-Installer-v1.0.0.zip">dist/…-Installer-v1.0.0.zip</a></li>
+    </ul>
+  </section>
+
+  <footer>
+    2026 RT-Thread 嵌入式大赛参赛作品 · Apache-2.0 ·
+    这个页面由 <code>docs/index.html</code> 提供，视频与封面都在 <code>docs/video/</code>。
+  </footer>
+
+</div>
+<script>
+  // 记住播放进度，刷新不丢（纯本地，无追踪）
+  const v = document.getElementById('v');
+  const KEY = 'titan-demo-time';
+  v.addEventListener('loadedmetadata', () => {
+    const t = parseFloat(localStorage.getItem(KEY) || '0');
+    if (t > 3 && t < v.duration - 3) v.currentTime = t;
+  });
+  v.addEventListener('timeupdate', () => {
+    if (Math.floor(v.currentTime) % 5 === 0) localStorage.setItem(KEY, v.currentTime);
+  });
+</script>
+</body>
+</html>

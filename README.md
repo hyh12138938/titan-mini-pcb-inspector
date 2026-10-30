@@ -8,6 +8,27 @@
 
 ---
 
+## 🎬 演示视频（128 秒，实机）
+
+**[▶ 点击观看（带播放器的页面）](https://hyh12138938.github.io/titan-mini-pcb-inspector/)**
+
+<p align="center">
+  <a href="https://hyh12138938.github.io/titan-mini-pcb-inspector/">
+    <img src="docs/video/poster.jpg" alt="演示视频封面" width="720">
+  </a>
+</p>
+
+其他打开方式：
+
+| 方式 | 链接 |
+|---|---|
+| 播放器页面（推荐） | https://hyh12138938.github.io/titan-mini-pcb-inspector/ |
+| 浏览器直链播放 | https://github.com/hyh12138938/titan-mini-pcb-inspector/raw/main/docs/video/demo_with_bgm.mp4 |
+| CDN（最快，可嵌网页） | https://cdn.jsdelivr.net/gh/hyh12138938/titan-mini-pcb-inspector@main/docs/video/demo_with_bgm.mp4 |
+| 仓库文件页（点 Download） | `docs/video/demo_with_bgm.mp4`（37.6 MB） |
+
+---
+
 ## 它能干什么
 
 一台不用连 PC 就能自己下结论的"看板子"设备：
