@@ -20,12 +20,14 @@
 
 其他打开方式：
 
-| 方式 | 链接 |
-|---|---|
-| 播放器页面（推荐） | https://hyh12138938.github.io/titan-mini-pcb-inspector/ |
-| 浏览器直链播放 | https://github.com/hyh12138938/titan-mini-pcb-inspector/raw/main/docs/video/demo_with_bgm.mp4 |
-| CDN（最快，可嵌网页） | https://cdn.jsdelivr.net/gh/hyh12138938/titan-mini-pcb-inspector@main/docs/video/demo_with_bgm.mp4 |
-| 仓库文件页（点 Download） | `docs/video/demo_with_bgm.mp4`（37.6 MB） |
+| 方式 | 链接 | 行为 |
+|---|---|---|
+| 播放器页面（推荐） | https://hyh12138938.github.io/titan-mini-pcb-inspector/ | 打开即播 |
+| 视频直链（Pages） | https://hyh12138938.github.io/titan-mini-pcb-inspector/video/demo_with_bgm.mp4 | 浏览器内联播放 |
+| 仓库文件页 | https://github.com/hyh12138938/titan-mini-pcb-inspector/blob/main/docs/video/demo_with_bgm.mp4 | 页面 + Download 按钮 |
+| Raw 直链 | https://github.com/hyh12138938/titan-mini-pcb-inspector/raw/main/docs/video/demo_with_bgm.mp4 | 返回 octet-stream，会**下载**而非播放 |
+
+> 文件 37.6 MB，超过 jsDelivr 的 20 MB 单文件上限，所以**没有** CDN 直链；想嵌网页请用上面第二条 Pages 直链。
 
 ---
 
