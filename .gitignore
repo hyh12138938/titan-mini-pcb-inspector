@@ -47,3 +47,7 @@ ml/models/
 # ---- 备份 ----
 *.bak
 *.bak_*
+
+# ---- 安装包生成物 ----
+installer/payload/
+installer/**/__pycache__/
